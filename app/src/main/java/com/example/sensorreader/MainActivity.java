@@ -24,7 +24,6 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -36,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
 
     final String temperatureUUID = "f0002345-0451-4000-b000-000000000000";
     final String humidityUUID = "f0003456-0451-4000-b000-000000000000";
+    final String heartRateUUID = "f0004567-0451-4000-b000-000000000000";
+    final String bloodOxygenUUID = "f0005678-0451-4000-b000-000000000000";
 
     public void updateStatus(String status){
         Message msg = new Message();
@@ -62,27 +63,54 @@ public class MainActivity extends AppCompatActivity {
             Bundle data = (Bundle) msg.obj;
             String characteristic = data.getString("characteristic");
             String value = data.getString("value");
-            if(characteristic.equals(temperatureUUID)){
-                int val = Integer.parseInt(value);
-                int progress =  val*30/3000;
-                Log.d("BLE", String.valueOf(progress));
-                TextView tmpConverted = (TextView) findViewById(R.id.temperatureConverted_lbl);
-                TextView temperatureRaw = (TextView)findViewById(R.id.temperatureRaw_lbl);
-                ProgressBar pb = (ProgressBar) findViewById(R.id.temperature_pb);
-                tmpConverted.setText(progress + "ºC");
-                temperatureRaw.setText(value + "mV");
-                pb.setProgress(progress);
-            }
-            else if(characteristic.equals(humidityUUID)){
-                int val = Integer.parseInt(value);
-                int progress =  val*100/3000;
-                Log.d("BLE", String.valueOf(progress));
-                TextView humidityConv = (TextView)findViewById(R.id.humidityConverted_lbl);
-                TextView humidityRaw = (TextView)findViewById(R.id.humidityRaw_lbl);
-                ProgressBar pb = (ProgressBar) findViewById(R.id.humidity_pb);
-                humidityConv.setText(progress + "%");
-                humidityRaw.setText(val + "mV");
-                pb.setProgress(progress);
+            assert characteristic != null;
+            switch (characteristic) {
+                case temperatureUUID: {
+                    int val = Integer.parseInt(value);
+                    int progress = val * 30 / 3000;
+                    TextView tmpConverted = findViewById(R.id.temperatureConverted_lbl);
+                    TextView temperatureRaw = findViewById(R.id.temperatureRaw_lbl);
+                    ProgressBar pb = findViewById(R.id.temperature_pb);
+                    tmpConverted.setText(progress + "ºC");
+                    temperatureRaw.setText(value + "mV");
+                    pb.setProgress(progress);
+                    break;
+                }
+                case humidityUUID: {
+                    int val = Integer.parseInt(value);
+                    int progress = val * 100 / 3000;
+                    TextView humidityConv = findViewById(R.id.humidityConverted_lbl);
+                    TextView humidityRaw = findViewById(R.id.humidityRaw_lbl);
+                    ProgressBar pb = findViewById(R.id.humidity_pb);
+                    humidityConv.setText(progress + "%");
+                    humidityRaw.setText(val + "mV");
+                    pb.setProgress(progress);
+                    break;
+                }
+                case heartRateUUID: {
+                    int val = Integer.parseInt(value);
+                    int progress = val * 100 / 3000; //40-200
+                    TextView humidityConv = findViewById(R.id.heart_rate_converted);
+                    TextView humidityRaw = findViewById(R.id.heart_rate_raw);
+                    ProgressBar pb = findViewById(R.id.heart_rate_pb);
+                    humidityRaw.setText(val + "mV");
+                    pb.setProgress(progress);
+                    progress = progress * 16 / 10 + 40;
+                    humidityConv.setText(progress + "bpm");
+                    break;
+                }
+                case bloodOxygenUUID: {
+                    int val = Integer.parseInt(value);
+                    int progress = val * 100 / 3000;    //60-100
+                    TextView humidityConv = findViewById(R.id.blood_oxygen_converted);
+                    TextView humidityRaw = findViewById(R.id.blood_oxygen_raw);
+                    ProgressBar pb = findViewById(R.id.blood_oxygen_pb);
+                    humidityRaw.setText(val + "mV");
+                    pb.setProgress(progress);
+                    progress = progress * 20 / 100 + 80;
+                    humidityConv.setText(progress + "%");
+                    break;
+                }
             }
         }
     };
@@ -135,11 +163,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, SCAN_PERIOD);
 
+            updateStatus("Scanning...");
             mScanning = true;
             bluetoothLeScanner.startScan(leScanCallback);
-            Message msg = new Message();
-            msg.obj="Scanning...";
-            statusHandler.sendMessage(msg);
         } else {
             stopScanning();
         }
@@ -173,13 +199,11 @@ public class MainActivity extends AppCompatActivity {
                     switch (newState){
                         case BluetoothAdapter.STATE_CONNECTED:
                             Log.d("BLE", "Connected");
-                            updateStatus("Connected");
                             bluetoothGatt.discoverServices();
                         case BluetoothAdapter.STATE_CONNECTING:
                             Log.d("BLE", "Connecting");
                         case BluetoothAdapter.STATE_DISCONNECTED:
                             Log.d("BLE", "Disconnected");
-                            updateStatus("Disconnected");
                         case BluetoothAdapter.STATE_DISCONNECTING:
                             Log.d("BLE", "Disconnecting");
                         default:
@@ -207,6 +231,10 @@ public class MainActivity extends AppCompatActivity {
                     if (status == BluetoothGatt.GATT_SUCCESS) {
                         BluetoothGattService service = gatt.getService(UUID.fromString(serviceUUID));
                         Log.d("BLE", "Discovered Service: " +  service.getUuid().toString());
+                        mScanning = true;
+
+                        updateStatus("Connected");
+
                         characteristicList = service.getCharacteristics();
                         readCharacteristic(gatt);
                     } else {
@@ -219,7 +247,6 @@ public class MainActivity extends AppCompatActivity {
                 public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
                     if (status == BluetoothGatt.GATT_SUCCESS) {
                         int characteristicValue = characteristic.getIntValue(BluetoothGattCharacteristic.FORMAT_UINT16, 0);
-                        Log.d("BLE", "onCharacteristicRead : "  + characteristicValue + " " + Arrays.toString(characteristic.getValue()));
 
                         Bundle bundle = new Bundle();
                         bundle.putString("value", Integer.toString(characteristicValue));

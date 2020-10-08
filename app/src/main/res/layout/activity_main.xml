@@ -7,6 +7,46 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/heart_rate_converted"
+        android:layout_width="59dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="16dp"
+        android:text="100 bpm"
+        app:layout_constraintBottom_toBottomOf="@+id/heart_rate_lbl"
+        app:layout_constraintStart_toEndOf="@+id/heart_rate_lbl"
+        app:layout_constraintTop_toTopOf="@+id/heart_rate_lbl"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/blood_oxygen_converted"
+        android:layout_width="39dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="16dp"
+        android:text="90%"
+        app:layout_constraintBottom_toBottomOf="@+id/blood_oxygen"
+        app:layout_constraintStart_toEndOf="@+id/blood_oxygen"
+        app:layout_constraintTop_toTopOf="@+id/blood_oxygen"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/heart_rate_lbl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Heart Rate:"
+        app:layout_constraintStart_toStartOf="@+id/humidity_pb"
+        app:layout_constraintTop_toBottomOf="@+id/humidity_pb" />
+
+    <TextView
+        android:id="@+id/blood_oxygen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:text="Oxygen Saturation:"
+        app:layout_constraintStart_toStartOf="@+id/heart_rate_pb"
+        app:layout_constraintTop_toBottomOf="@+id/heart_rate_pb" />
+
+    <TextView
         android:id="@+id/temperatureConverted_lbl"
         android:layout_width="38dp"
         android:layout_height="18dp"
@@ -21,7 +61,7 @@
         android:id="@+id/humidityConverted_lbl"
         android:layout_width="39dp"
         android:layout_height="19dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="16dp"
         android:text="50%"
         app:layout_constraintBottom_toBottomOf="@+id/humidity_label"
         app:layout_constraintStart_toEndOf="@+id/humidity_label"
@@ -39,14 +79,14 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2" />
+        app:layout_constraintVertical_bias="0.106" />
 
     <TextView
         android:id="@+id/temperature_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="48dp"
-        android:text="Temperature(ºC):"
+        android:text="Temperature:"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.158"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,15 +113,39 @@
         android:max="100"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/humidity_label"
+        app:layout_constraintStart_toStartOf="@+id/temperature_pb"
         app:layout_constraintTop_toBottomOf="@+id/humidity_label" />
+
+    <ProgressBar
+        android:id="@+id/heart_rate_pb"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="281dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="24dp"
+        android:max="100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/heart_rate_lbl"
+        app:layout_constraintTop_toBottomOf="@+id/heart_rate_lbl" />
+
+    <ProgressBar
+        android:id="@+id/blood_oxygen_pb"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="281dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:max="100"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/blood_oxygen"
+        app:layout_constraintTop_toBottomOf="@+id/blood_oxygen" />
 
     <TextView
         android:id="@+id/humidity_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="44dp"
-        android:text="Humidity(%):"
+        android:text="Humidity:"
         app:layout_constraintStart_toStartOf="@+id/temperature_pb"
         app:layout_constraintTop_toBottomOf="@+id/temperature_pb" />
 
@@ -89,21 +153,39 @@
         android:id="@+id/temperatureRaw_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
         android:text="1.324V"
         app:layout_constraintBottom_toBottomOf="@+id/temperatureConverted_lbl"
-        app:layout_constraintStart_toEndOf="@+id/temperatureConverted_lbl"
+        app:layout_constraintEnd_toEndOf="@+id/temperature_pb"
         app:layout_constraintTop_toTopOf="@+id/temperatureConverted_lbl" />
 
     <TextView
         android:id="@+id/humidityRaw_lbl"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
         android:text="1.324V"
         app:layout_constraintBottom_toBottomOf="@+id/humidityConverted_lbl"
-        app:layout_constraintStart_toEndOf="@+id/humidityConverted_lbl"
+        app:layout_constraintEnd_toEndOf="@+id/humidity_pb"
         app:layout_constraintTop_toTopOf="@+id/humidityConverted_lbl"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/heart_rate_raw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.324V"
+        app:layout_constraintBottom_toBottomOf="@+id/heart_rate_converted"
+        app:layout_constraintEnd_toEndOf="@+id/heart_rate_pb"
+        app:layout_constraintTop_toTopOf="@+id/heart_rate_converted"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/blood_oxygen_raw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.324V"
+        app:layout_constraintBottom_toBottomOf="@+id/blood_oxygen_converted"
+        app:layout_constraintEnd_toEndOf="@+id/blood_oxygen_pb"
+        app:layout_constraintTop_toTopOf="@+id/blood_oxygen_converted"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -112,8 +194,88 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:layout_marginEnd="48dp"
-        android:text="Status"
+        android:text="Disconnected"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="100"
+        app:layout_constraintBottom_toBottomOf="@+id/humidity_pb"
+        app:layout_constraintStart_toEndOf="@+id/humidity_pb"
+        app:layout_constraintTop_toTopOf="@+id/humidity_pb" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="80"
+        app:layout_constraintBottom_toBottomOf="@+id/blood_oxygen_pb"
+        app:layout_constraintEnd_toStartOf="@+id/blood_oxygen_pb"
+        app:layout_constraintTop_toTopOf="@+id/blood_oxygen_pb" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="40"
+        app:layout_constraintBottom_toBottomOf="@+id/heart_rate_pb"
+        app:layout_constraintEnd_toStartOf="@+id/heart_rate_pb"
+        app:layout_constraintTop_toTopOf="@+id/heart_rate_pb" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="200"
+        app:layout_constraintBottom_toBottomOf="@+id/heart_rate_pb"
+        app:layout_constraintStart_toEndOf="@+id/heart_rate_pb"
+        app:layout_constraintTop_toTopOf="@+id/heart_rate_pb" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="100"
+        app:layout_constraintBottom_toBottomOf="@+id/blood_oxygen_pb"
+        app:layout_constraintStart_toEndOf="@+id/blood_oxygen_pb"
+        app:layout_constraintTop_toTopOf="@+id/blood_oxygen_pb" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="@+id/humidity_pb"
+        app:layout_constraintEnd_toStartOf="@+id/humidity_pb"
+        app:layout_constraintTop_toTopOf="@+id/humidity_pb" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="30"
+        app:layout_constraintBottom_toBottomOf="@+id/temperature_pb"
+        app:layout_constraintStart_toEndOf="@+id/temperature_pb"
+        app:layout_constraintTop_toTopOf="@+id/temperature_pb" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="@+id/temperature_pb"
+        app:layout_constraintEnd_toStartOf="@+id/temperature_pb"
+        app:layout_constraintTop_toTopOf="@+id/temperature_pb" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
